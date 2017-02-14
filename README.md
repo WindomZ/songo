@@ -3,7 +3,7 @@
 
 ## Documents
 
-[songo协议文档](https://github.com/suboat/songo)
+[songo协议文档](https://github.com/suboat/songo/blob/master/desc.md)
 
 ## Usage
 
@@ -14,7 +14,7 @@
 
   URL地址：
   ```
-  http://x.x.x/xxx?_limit=50&_page=2
+  http(s)://x.x.x/xxx?_limit=50&_page=2
     &_sort=created,money,-level
     &year=$eq$2016&month=$bt$8,11&date=$eq$1&day=$in$0,6
   ```
