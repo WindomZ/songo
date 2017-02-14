@@ -37,8 +37,8 @@
 
 ## TODO
 
-- [ ] sql support SQL
-- [ ] mongo support MongoDB
+- [ ] support SQL
+- [ ] support MongoDB
 
 ## License
 
