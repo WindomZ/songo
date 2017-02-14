@@ -7,6 +7,7 @@ import (
 
 type SongoQuery struct {
 	query map[string]string
+	keys  []string
 }
 
 func (s *SongoQuery) get(key string) (v string, ok bool) {
@@ -18,12 +19,26 @@ func (s *SongoQuery) get(key string) (v string, ok bool) {
 }
 
 func (s *SongoQuery) set(key, value string) string {
-	v, _ := s.get(key)
+	v, ok := s.get(key)
+	if !ok {
+		s.keys = append(s.keys, key)
+	}
 	s.query[key] = value
 	return v
 }
 
-func (s *SongoQuery) GetQuery(key string) (tag string, value interface{}) {
+func (s SongoQuery) Size() int {
+	if s.query == nil {
+		return 0
+	}
+	return len(s.query)
+}
+
+func (s SongoQuery) GetQueryKeys() []string {
+	return s.keys
+}
+
+func (s SongoQuery) GetQuery(key string) (tag string, value interface{}) {
 	if v, ok := s.get(key); ok {
 		vs := strings.Split(v, "$")
 		if len(vs) <= 2 {
