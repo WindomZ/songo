@@ -38,18 +38,23 @@ func (s SongoQuery) GetQueryKeys() []string {
 	return s.keys
 }
 
-func (s SongoQuery) GetQuery(key string) (operator string, value interface{}) {
+func (s SongoQuery) GetQueryValue(key string) (*SongoQueryValue, bool) {
 	if str, ok := s.get(key); ok {
-		qv, ok := SplitQueryValue(str)
-		if !ok {
-			return
+		if qv, ok := SplitQueryValue(str); ok {
+			return &qv, true
 		}
+	}
+	return nil, false
+}
+
+func (s SongoQuery) GetQuery(key string) (operator string, value interface{}) {
+	if qv, ok := s.GetQueryValue(key); ok {
 		operator = qv.Operator
 		if qv.HasNext() {
 			value = qv.ValueString()
 			return
 		}
-		str = qv.ValueString()
+		str := qv.ValueString()
 		//println(key, operator, str, ok)
 		if v, err := strconv.ParseBool(str); err == nil {
 			value = v
