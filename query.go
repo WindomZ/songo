@@ -38,31 +38,32 @@ func (s SongoQuery) GetQueryKeys() []string {
 	return s.keys
 }
 
-func (s SongoQuery) GetQuery(key string) (tag string, value interface{}) {
-	if v, ok := s.get(key); ok {
-		vs := strings.Split(v, "$")
-		if len(vs) <= 2 {
+func (s SongoQuery) GetQuery(key string) (operator string, value interface{}) {
+	if str, ok := s.get(key); ok {
+		qv, ok := SplitQueryValue(str)
+		if !ok {
 			return
 		}
-		tag = "$" + vs[1]
-		vs[2] = strings.TrimSpace(vs[2])
-		if v, err := strconv.ParseBool(vs[2]); err == nil {
+		operator = qv.Operator
+		str = qv.ValueString()
+		//println(key, operator, str, ok)
+		if v, err := strconv.ParseBool(str); err == nil {
 			value = v
 			return
-		} else if v, err := strconv.ParseInt(vs[2], 10, 64); err == nil {
+		} else if v, err := strconv.ParseInt(str, 10, 64); err == nil {
 			value = v
 			return
-		} else if v, err := strconv.ParseFloat(vs[2], 64); err == nil {
+		} else if v, err := strconv.ParseFloat(str, 64); err == nil {
 			value = v
 			return
-		} else if v, err := strconv.ParseUint(vs[2], 10, 64); err == nil {
+		} else if v, err := strconv.ParseUint(str, 10, 64); err == nil {
 			value = v
 			return
 		}
-		if strings.Contains(vs[2], ",") {
-			value = strings.Split(vs[2], ",")
+		if strings.Contains(str, ",") {
+			value = strings.Split(str, ",")
 		} else {
-			value = vs[2]
+			value = str
 		}
 	}
 	return
