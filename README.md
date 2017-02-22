@@ -1,13 +1,30 @@
 # songo
+
 实现songo协议的Golang库
 
 ## Documents
 
 [songo协议文档](https://github.com/suboat/songo/blob/master/desc.md)
 
+## Features
+
+- [ ] support SQL
+- [ ] support Postgres
+- [ ] support Mongo
+
 ## Usage
 
-开发中...
+#### SQL
+
+* 开发中...
+
+#### Postgres
+
+* 开发中...
+
+#### Mongo
+
+* 开发中...
 
 ## Example
 * 实例1
@@ -35,11 +52,6 @@
   }
   ```
 
-## TODO
-
-- [ ] support SQL
-- [ ] support MongoDB
-
 ## License
 
-The MIT License ([MIT](https://github.com/WindomZ/songo/blob/master/LICENSE))
+The [MIT License](https://github.com/WindomZ/songo/blob/master/LICENSE)
