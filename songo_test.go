@@ -16,20 +16,20 @@ func TestSongo_ParseRawURL(t *testing.T) {
 	assert.Equal(t, s.Limit, 50)
 	assert.Equal(t, s.Page, 2)
 	assert.Equal(t, s.Sort, []string([]string{"created", "money", "-level"}))
-	if k, v := s.Query.GetQuery("year"); v != nil {
-		assert.Equal(t, k, "$eq")
+	if os, v, ok := s.Query.GetQuery("year"); ok {
+		assert.Equal(t, os, []string{"$eq"})
 		assert.Equal(t, v, int64(2016))
 	}
-	if k, v := s.Query.GetQuery("month"); v != nil {
-		assert.Equal(t, k, "$bt")
+	if os, v, ok := s.Query.GetQuery("month"); ok {
+		assert.Equal(t, os, []string{"$bt"})
 		assert.Equal(t, v, []string([]string{"8", "11"}))
 	}
-	if k, v := s.Query.GetQuery("date"); v != nil {
-		assert.Equal(t, k, "$eq")
+	if os, v, ok := s.Query.GetQuery("date"); ok {
+		assert.Equal(t, os, []string{"$eq"})
 		assert.Equal(t, v, true)
 	}
-	if k, v := s.Query.GetQuery("day"); v != nil {
-		assert.Equal(t, k, "$in")
+	if os, v, ok := s.Query.GetQuery("day"); ok {
+		assert.Equal(t, os, []string{"$in"})
 		assert.Equal(t, v, []string{"0", "6"})
 	}
 }

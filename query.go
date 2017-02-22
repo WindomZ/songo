@@ -1,10 +1,5 @@
 package songo
 
-import (
-	"strconv"
-	"strings"
-)
-
 type SongoQuery struct {
 	query map[string]string
 	keys  []string
@@ -28,17 +23,17 @@ func (s *SongoQuery) set(key, value string) string {
 }
 
 func (s SongoQuery) Size() int {
-	if s.query == nil {
-		return 0
+	if s.query != nil {
+		return len(s.query)
 	}
-	return len(s.query)
+	return 0
 }
 
-func (s SongoQuery) GetQueryKeys() []string {
+func (s SongoQuery) GetKeys() []string {
 	return s.keys
 }
 
-func (s SongoQuery) GetQueryValue(key string) (*SongoQueryValue, bool) {
+func (s SongoQuery) GetValue(key string) (*SongoQueryValue, bool) {
 	if str, ok := s.get(key); ok {
 		if qv, ok := SplitQueryValue(str); ok {
 			return &qv, true
@@ -47,33 +42,10 @@ func (s SongoQuery) GetQueryValue(key string) (*SongoQueryValue, bool) {
 	return nil, false
 }
 
-func (s SongoQuery) GetQuery(key string) (operator string, value interface{}) {
-	if qv, ok := s.GetQueryValue(key); ok {
-		operator = qv.Operator
-		if qv.HasNext() {
-			value = qv.ValueString()
-			return
-		}
-		str := qv.ValueString()
-		//println(key, operator, str, ok)
-		if v, err := strconv.ParseBool(str); err == nil {
-			value = v
-			return
-		} else if v, err := strconv.ParseInt(str, 10, 64); err == nil {
-			value = v
-			return
-		} else if v, err := strconv.ParseFloat(str, 64); err == nil {
-			value = v
-			return
-		} else if v, err := strconv.ParseUint(str, 10, 64); err == nil {
-			value = v
-			return
-		}
-		if strings.Contains(str, ",") {
-			value = strings.Split(str, ",")
-		} else {
-			value = str
-		}
+func (s SongoQuery) GetQuery(key string) (operators []string, value interface{}, ok bool) {
+	var qv *SongoQueryValue
+	if qv, ok = s.GetValue(key); ok {
+		operators, value = qv.GetQuery()
 	}
 	return
 }
