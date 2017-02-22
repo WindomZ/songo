@@ -45,6 +45,10 @@ func (s SongoQuery) GetQuery(key string) (operator string, value interface{}) {
 			return
 		}
 		operator = qv.Operator
+		if qv.HasNext() {
+			value = qv.ValueString()
+			return
+		}
 		str = qv.ValueString()
 		//println(key, operator, str, ok)
 		if v, err := strconv.ParseBool(str); err == nil {

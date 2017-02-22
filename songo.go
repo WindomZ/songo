@@ -35,9 +35,7 @@ func (s *Songo) ParseURL(u *url.URL) error {
 		case "_sort":
 			s.Sort = strings.Split(strings.Join(v, ","), ",")
 		default:
-			if VerifyQueryValue(v[0]) {
-				s.Query.set(k, v[0])
-			}
+			s.Query.set(k, v[0])
 		}
 	}
 	return nil

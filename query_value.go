@@ -33,6 +33,14 @@ func (s *SongoQueryValue) Split(value string) bool {
 	return s.Done
 }
 
+func (s *SongoQueryValue) HasNext() bool {
+	if s.Value == nil {
+		return false
+	}
+	_, ok := s.Value.(SongoQueryValue)
+	return ok
+}
+
 func (s *SongoQueryValue) ValueString() string {
 	if s.Done && s.Value != nil {
 		if qv, ok := s.Value.(SongoQueryValue); ok {
