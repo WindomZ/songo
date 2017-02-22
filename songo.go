@@ -6,6 +6,14 @@ import (
 	"strings"
 )
 
+type ISongo interface {
+	ParseURL(u *url.URL) error
+	ParseRawURL(rawurl string) error
+
+	Least(key string, value interface{})
+	Must(key string, value interface{})
+}
+
 type Songo struct {
 	Limit int
 	Page  int
@@ -39,4 +47,16 @@ func (s *Songo) ParseRawURL(rawurl string) error {
 		return err
 	}
 	return s.ParseURL(u)
+}
+
+func (s *Songo) Least(key string, value interface{}) {
+	if value != nil {
+		s.Query.set(key, value.(string))
+	}
+}
+
+func (s *Songo) Must(key string, value interface{}) {
+	if value != nil {
+		s.Query.set(key, value.(string))
+	}
 }
