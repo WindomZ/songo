@@ -30,7 +30,7 @@ func (s *Songo) Must(key string, value interface{}) {
 	}
 }
 
-func (s *Songo) SongoResult() *SongoResult {
+func (s *Songo) songoResult() *SongoResult {
 	return &SongoResult{
 		songo:  s,
 		result: make(SongoResultMap, s.Query.Size()+len(s.init().must)),
@@ -38,10 +38,13 @@ func (s *Songo) SongoResult() *SongoResult {
 }
 
 func (s *Songo) Result() SongoResultMap {
-	r := s.SongoResult() // get new SongoResult
+	r := s.songoResult() // get new SongoResult
 	for _, k := range s.Query.GetKeys() {
-		if os, v, ok := s.Query.GetQuery(k); ok {
-			r.Update(k, os, v)
+		if vs, ok := s.Query.GetValues(k); ok {
+			for _, v := range vs {
+				os, v := v.GetQuery()
+				r.Update(k, os, v)
+			}
 		}
 	}
 	return r.Result()

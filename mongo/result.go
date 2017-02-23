@@ -5,14 +5,16 @@ import "github.com/WindomZ/songo"
 type SongoResultMap map[string]interface{}
 
 type SongoResult struct {
-	songo  *Songo
-	result SongoResultMap
-	parent SongoResultMap
-	last   interface{}
+	songo    *Songo
+	result   SongoResultMap
+	lastMap  SongoResultMap
+	lastName string
+	last     interface{}
 }
 
 func (s *SongoResult) Reset() {
-	s.parent = s.result
+	s.lastMap = s.result
+	s.lastName = ""
 	s.last = s.result
 }
 
@@ -21,18 +23,28 @@ func (s SongoResult) IsEmpty() bool {
 }
 
 func (s *SongoResult) get(key, operator string) bool {
+	//defer func() {
+	//	println(fmt.Sprintf("get: %v - %v", key, operator))
+	//	println(fmt.Sprintf("get: %#v", s.lastMap))
+	//	println(fmt.Sprintf("get: %#v", s.lastName))
+	//	println(fmt.Sprintf("get: %#v", s.last))
+	//}()
 	if songo.IsQueryOperatorGroup(operator) {
 		// like: {"$or": [{"age": 23 }, {"name": "robin"}]}
-		if v, ok := s.parent[operator]; ok {
+		s.lastName = operator
+		if v, ok := s.lastMap[operator]; ok {
 			s.last = v // []SongoResultMap{}
 		} else {
 			s.last = []SongoResultMap{} // []SongoResultMap{}
-			s.parent[operator] = s.last
+			s.lastMap[operator] = s.last
 		}
 	} else if songo.IsQueryOperatorKV(operator) {
 		// like: {"age": {"$gt" :20}}
 		// like: {"age": {"$in": [20, 22, 25]}}
-		if v, ok := s.parent[key]; ok {
+		if _, ok := s.last.([]SongoResultMap); ok {
+			return true
+		}
+		if v, ok := s.lastMap[key]; ok {
 			if v, ok := v.(SongoResultMap); ok {
 				s.last = v // SongoResultMap{}
 			} else {
@@ -40,11 +52,14 @@ func (s *SongoResult) get(key, operator string) bool {
 			}
 		} else {
 			s.last = SongoResultMap{} // SongoResultMap{}
-			s.parent[key] = s.last
+			s.lastMap[key] = s.last
 		}
 	} else if songo.IsQueryOperatorV(operator) {
 		// like: {"age": 20}
-		s.last = s.parent // SongoResultMap{}
+		if _, ok := s.last.([]SongoResultMap); ok {
+			return true
+		}
+		s.last = s.lastMap // SongoResultMap{}
 	} else {
 		return false
 	}
@@ -52,6 +67,12 @@ func (s *SongoResult) get(key, operator string) bool {
 }
 
 func (s *SongoResult) set(key, operator string, value interface{}) bool {
+	//defer func() {
+	//	println(fmt.Sprintf("set: %v - %v - %#v", key, operator, value))
+	//	println(fmt.Sprintf("set: %#v", s.lastMap))
+	//	println(fmt.Sprintf("set: %#v", s.lastName))
+	//	println(fmt.Sprintf("set: %#v", s.last))
+	//}()
 	if songo.IsQueryOperatorGroup(operator) {
 		// like: {"$or": [{"age": 23 }, {"name": "robin"}]}
 		return true
@@ -59,15 +80,16 @@ func (s *SongoResult) set(key, operator string, value interface{}) bool {
 		// like: {"age": {"$gt" :20}}
 		// like: {"age": {"$in": [20, 22, 25]}}
 		if v, ok := s.last.([]SongoResultMap); ok {
-			m := SongoResultMap{operator: value}
-			v = append(v, m)
+			s.last = append(v, SongoResultMap{operator: value})
+			s.lastMap[s.lastName] = s.last
 		} else if v, ok := s.last.(SongoResultMap); ok {
 			v[operator] = value
 		}
 	} else if songo.IsQueryOperatorV(operator) {
 		// like: {"age": 20}
 		if v, ok := s.last.([]SongoResultMap); ok {
-			v = append(v, SongoResultMap{key: value})
+			s.last = append(v, SongoResultMap{key: value})
+			s.lastMap[s.lastName] = s.last
 		} else if v, ok := s.last.(SongoResultMap); ok {
 			v[key] = value
 		}
