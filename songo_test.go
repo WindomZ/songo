@@ -5,12 +5,16 @@ import (
 	"testing"
 )
 
-func TestSongo_ParseRawURL(t *testing.T) {
-	var s Songo
-	if err := s.ParseRawURL("http://127.0.0.1/demo" +
+var (
+	testURL1 string = "http://127.0.0.1/demo" +
 		"?_limit=50&_page=2" +
 		"&_sort=created,money,-level" +
-		"&year=$eq$2016&month=$bt$8,11&date=$eq$1&day=$in$0,6"); err != nil {
+		"&year=$eq$2016&month=$bt$8,11&date=$eq$1&day=$in$0,6"
+)
+
+func TestSongo_ParseRawURL(t *testing.T) {
+	var s Songo
+	if err := s.ParseRawURL(testURL1); err != nil {
 		t.Fatal(err)
 	}
 	assert.Equal(t, s.Limit, 50)

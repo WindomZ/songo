@@ -22,20 +22,22 @@ type Songo struct {
 }
 
 func (s *Songo) ParseURL(u *url.URL) error {
-	vs := u.Query()
-	for k, v := range vs {
-		if len(v) == 0 {
+	values := u.Query()
+	for k, vs := range values {
+		if len(vs) == 0 {
 			continue
 		}
 		switch k {
 		case "_limit":
-			s.Limit, _ = strconv.Atoi(v[0])
+			s.Limit, _ = strconv.Atoi(vs[0])
 		case "_page":
-			s.Page, _ = strconv.Atoi(v[0])
+			s.Page, _ = strconv.Atoi(vs[0])
 		case "_sort":
-			s.Sort = strings.Split(strings.Join(v, ","), ",")
+			s.Sort = strings.Split(strings.Join(vs, ","), ",")
 		default:
-			s.Query.Set(k, v[0])
+			for _, v := range vs {
+				s.Query.Set(k, v)
+			}
 		}
 	}
 	return nil

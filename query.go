@@ -17,6 +17,19 @@ func (s *SongoQuery) Get(key string) (v []string, ok bool) {
 }
 
 func (s *SongoQuery) Set(key, value string) {
+	key = strings.TrimSpace(key)
+	value = strings.TrimSpace(value)
+	if len(key) == 0 || len(value) == 0 {
+		return
+	}
+	if strings.Contains(value, ",$") ||
+		strings.Contains(value, ", $") {
+		vs := strings.Split(value, ",")
+		for _, v := range vs {
+			s.Set(key, v)
+		}
+		return
+	}
 	if i := strings.LastIndex(key, "$"); i >= 0 {
 		value = key[:i] + value
 		key = key[i+1:]
