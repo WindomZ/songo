@@ -26,7 +26,7 @@ func TestSongo_ParseRawURL(t *testing.T) {
 	}
 	if os, v, ok := s.Query.GetQuery("date"); ok {
 		assert.Equal(t, os, []string{"$eq"})
-		assert.Equal(t, v, true)
+		assert.Equal(t, v, int64(1))
 	}
 	if os, v, ok := s.Query.GetQuery("day"); ok {
 		assert.Equal(t, os, []string{"$in"})

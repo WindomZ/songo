@@ -94,13 +94,13 @@ func (s *SongoQueryValue) String() string {
 }
 
 func StringToValue(str string) interface{} {
-	if v, err := strconv.ParseBool(str); err == nil {
-		return v
-	} else if v, err := strconv.ParseInt(str, 10, 64); err == nil {
+	if v, err := strconv.ParseInt(str, 10, 64); err == nil {
 		return v
 	} else if v, err := strconv.ParseFloat(str, 64); err == nil {
 		return v
 	} else if v, err := strconv.ParseUint(str, 10, 64); err == nil {
+		return v
+	} else if v, err := strconv.ParseBool(str); err == nil {
 		return v
 	} else if strings.Contains(str, ",") {
 		return strings.Split(str, ",")
