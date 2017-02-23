@@ -1,6 +1,6 @@
 # songo
 
-实现songo协议的Golang库
+实现songo协议的Go库
 
 ## Documents
 
@@ -23,8 +23,6 @@
 * 开发中...
 
 #### Mongo
-
-* 编写中...
 
 ## Example
 * 实例1
