@@ -10,7 +10,7 @@
 
 - [ ] support SQL
 - [ ] support Postgres
-- [ ] support Mongo
+- [x] support Mongo
 
 ## Usage
 
@@ -24,7 +24,7 @@
 
 #### Mongo
 
-* 开发中...
+* 编写中...
 
 ## Example
 * 实例1
