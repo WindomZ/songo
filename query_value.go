@@ -49,6 +49,8 @@ func (s *SongoQueryValue) HasNext() (ok bool) {
 func (s SongoQueryValue) GetValue() interface{} {
 	if str, ok := s.Value.(string); ok {
 		return StringToValue(str)
+	} else if v, ok := s.Value.(*SongoQueryValue); ok {
+		return v.GetValue()
 	}
 	return s.Value
 }
@@ -56,7 +58,7 @@ func (s SongoQueryValue) GetValue() interface{} {
 func (s SongoQueryValue) GetQuery() (operators []string, value interface{}) {
 	qv := &s
 	for ok := true; ok; {
-		operators = append(operators, s.Operator)
+		operators = append(operators, qv.Operator)
 		qv, ok = qv.Next()
 	}
 	value = qv.GetValue()

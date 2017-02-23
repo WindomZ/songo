@@ -35,7 +35,7 @@ func (s *Songo) ParseURL(u *url.URL) error {
 		case "_sort":
 			s.Sort = strings.Split(strings.Join(v, ","), ",")
 		default:
-			s.Query.set(k, v[0])
+			s.Query.Set(k, v[0])
 		}
 	}
 	return nil
@@ -51,12 +51,12 @@ func (s *Songo) ParseRawURL(rawurl string) error {
 
 func (s *Songo) Least(key string, value interface{}) {
 	if value != nil {
-		s.Query.set(key, value.(string))
+		s.Query.Set(key, value.(string))
 	}
 }
 
 func (s *Songo) Must(key string, value interface{}) {
 	if value != nil {
-		s.Query.set(key, value.(string))
+		s.Query.Set(key, value.(string))
 	}
 }
