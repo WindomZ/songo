@@ -2,7 +2,7 @@ package mongo
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
+	"github.com/WindomZ/testify/assert"
 	"testing"
 )
 
