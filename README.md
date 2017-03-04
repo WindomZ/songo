@@ -1,4 +1,6 @@
 # songo
+[![Build Status](https://travis-ci.org/WindomZ/songo.svg?branch=master)](https://travis-ci.org/WindomZ/songo)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
 
 实现songo协议的Go库
 
