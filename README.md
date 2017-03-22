@@ -10,23 +10,27 @@
 
 ## Features
 
-- [ ] support SQL
+- [ ] support MySQL
 - [ ] support Postgres
 - [x] support Mongo
 
-## Usage
+## MySQL
 
-#### SQL
-
-* 开发中...
-
-#### Postgres
+![v0.0.0](https://img.shields.io/badge/version-v0.0.0-orange.svg)
 
 * 开发中...
 
-#### Mongo
+## Postgres
 
-## Example
+![v0.0.0](https://img.shields.io/badge/version-v0.0.0-orange.svg)
+
+* 开发中...
+
+## Mongo
+
+![v1.0.0](https://img.shields.io/badge/version-v1.0.0-blue.svg)
+
+### Example
 * 实例1
 
   URL地址：
