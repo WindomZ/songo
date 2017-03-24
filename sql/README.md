@@ -1,1 +1,0 @@
-## Implement for SQL

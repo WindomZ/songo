@@ -11,8 +11,8 @@
 ## Features
 
 - [ ] support MySQL
-- [ ] support Postgres
-- [x] support Mongo
+- [ ] support PostgreSQL
+- [x] support MongoDB
 
 ## MySQL
 
@@ -20,13 +20,13 @@
 
 * 开发中...
 
-## Postgres
+## PostgreSQL
 
 ![v0.0.0](https://img.shields.io/badge/version-v0.0.0-orange.svg)
 
 * 开发中...
 
-## Mongo
+## MongoDB
 
 ![v1.0.0](https://img.shields.io/badge/version-v1.0.0-blue.svg)
 
