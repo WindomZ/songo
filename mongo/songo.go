@@ -3,7 +3,7 @@ package mongo
 import "github.com/WindomZ/songo"
 
 type Songo struct {
-	songo.Songo
+	songo.SongoParser
 	least SongoResultMap
 	must  SongoResultMap
 }
@@ -18,16 +18,18 @@ func (s *Songo) init() *Songo {
 	return s
 }
 
-func (s *Songo) Least(key string, value interface{}) {
+func (s *Songo) Least(key string, value interface{}) songo.Songo {
 	if len(key) != 0 && value != nil {
 		s.init().least[key] = value
 	}
+	return s
 }
 
-func (s *Songo) Must(key string, value interface{}) {
+func (s *Songo) Must(key string, value interface{}) songo.Songo {
 	if len(key) != 0 && value != nil {
 		s.init().must[key] = value
 	}
+	return s
 }
 
 func (s *Songo) songoResult() *SongoResult {

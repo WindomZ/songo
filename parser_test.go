@@ -13,10 +13,9 @@ var (
 		"&time=$eq$201612182359"
 )
 
-func TestSongo_ParseRawURL(t *testing.T) {
-	var s Songo
-	s.Include("year")
-	s.Exclude("time")
+func TestSongoParser_ParseRawURL(t *testing.T) {
+	var s SongoParser
+	s.Include("year").Exclude("time")
 	if err := s.ParseRawURL(testURL1); err != nil {
 		t.Fatal(err)
 	}
