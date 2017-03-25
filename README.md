@@ -28,7 +28,7 @@
 
 ## MongoDB
 
-![v1.0.0](https://img.shields.io/badge/version-v1.0.0-blue.svg)
+![v1.0.1](https://img.shields.io/badge/version-v1.0.1-blue.svg)
 
 ### Example
 * 实例1
