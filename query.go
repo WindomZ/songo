@@ -1,22 +1,58 @@
 package songo
 
-import "strings"
+import (
+	"errors"
+	"strings"
+)
 
 type SongoQuery struct {
-	query map[string][]string
-	keys  []string
-	size  int
+	includes map[string]bool
+	query    map[string][]string
+	keys     []string
+	size     int
+}
+
+func (s *SongoQuery) Include(key string) {
+	if s.includes == nil {
+		s.includes = make(map[string]bool)
+	}
+	s.includes[key] = true
+}
+
+func (s *SongoQuery) Exclude(key string) {
+	if s.includes == nil {
+		s.includes = make(map[string]bool)
+	}
+	s.includes[key] = false
+}
+
+func (s *SongoQuery) Analyze() error {
+	if s.includes != nil && len(s.includes) != 0 {
+		for k, v := range s.includes {
+			if !v {
+			} else if _, ok := s.query[k]; !ok {
+				return errors.New("songo: missing key: " + k)
+			}
+		}
+	}
+	return nil
 }
 
 func (s *SongoQuery) Get(key string) (v []string, ok bool) {
 	if s.query == nil {
 		s.query = make(map[string][]string)
+		return nil, false
 	}
 	v, ok = s.query[key]
 	return
 }
 
 func (s *SongoQuery) Set(key, value string) {
+	if s.includes != nil {
+		if v, ok := s.includes[key]; ok && !v {
+			return
+		}
+	}
 	key = strings.TrimSpace(key)
 	value = strings.TrimSpace(value)
 	if len(key) == 0 || len(value) == 0 {
@@ -48,9 +84,6 @@ func (s SongoQuery) Size() int {
 }
 
 func (s SongoQuery) GetKeys() []string {
-	if s.Size() <= 0 {
-		return []string{}
-	}
 	return s.keys
 }
 

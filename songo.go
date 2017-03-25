@@ -12,6 +12,9 @@ type ISongo interface {
 
 	Least(key string, value interface{})
 	Must(key string, value interface{})
+
+	Include(key string)
+	Exclude(key string)
 }
 
 type Songo struct {
@@ -40,7 +43,7 @@ func (s *Songo) ParseURL(u *url.URL) error {
 			}
 		}
 	}
-	return nil
+	return s.Query.Analyze()
 }
 
 func (s *Songo) ParseRawURL(rawurl string) error {
@@ -61,4 +64,12 @@ func (s *Songo) Must(key string, value interface{}) {
 	if value != nil {
 		s.Query.Set(key, value.(string))
 	}
+}
+
+func (s *Songo) Include(key string) {
+	s.Query.Include(key)
+}
+
+func (s *Songo) Exclude(key string) {
+	s.Query.Exclude(key)
 }

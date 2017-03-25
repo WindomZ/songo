@@ -9,11 +9,14 @@ var (
 	testURL1 string = "http://127.0.0.1/demo" +
 		"?_limit=50&_page=2" +
 		"&_sort=created,money,-level" +
-		"&year=$eq$2016&month=$bt$8,11&date=$eq$1&day=$in$0,6"
+		"&year=$eq$2016&month=$bt$8,11&date=$eq$1&day=$in$0,6" +
+		"&time=$eq$201612182359"
 )
 
 func TestSongo_ParseRawURL(t *testing.T) {
 	var s Songo
+	s.Include("year")
+	s.Exclude("time")
 	if err := s.ParseRawURL(testURL1); err != nil {
 		t.Fatal(err)
 	}
@@ -35,5 +38,8 @@ func TestSongo_ParseRawURL(t *testing.T) {
 	if os, v, ok := s.Query.GetQuery("day"); ok {
 		assert.Equal(t, os, []string{"$in"})
 		assert.Equal(t, v, []string{"0", "6"})
+	}
+	if _, _, ok := s.Query.GetQuery("time"); ok {
+		assert.FailNow(t, "Fail to exclude key", "time")
 	}
 }
